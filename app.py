@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify, json
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from models import setup_db
+from models import setup_db, Decks, Exercises, Categories
 
 def create_app(test_config=None):
   # create and configure the app
@@ -18,6 +18,48 @@ def create_app(test_config=None):
         return greeting
 
 
+  # _________________________________________
+  # Read Routes
+  # _________________________________________
+  
+  @app.route('/decks', methods=['GET'])
+  @requires_auth('get:decks')
+  def get_decks(token):
+    db_decks= Decks.query.all()
+    if len(db_decks) == 0:
+        decks = [] 
+    else:
+        decks = [deck.format() for deck in db_decks]
+    return jsonify({
+        "success": True,
+        "decks": decks
+    })
+
+  @app.route('/exercises', methods=['GET'])
+  @requires_auth('get:exercises')
+  def get_exercises(token):
+    db_exercises= Exercises.query.all()
+    if len(db_exercises) == 0:
+        exercises = [] 
+    else:
+        exercises = [exercise.format() for exercise in db_exercises]
+    return jsonify({
+        "success": True,
+        "exercises": exercises
+    })
+
+  @app.route('/categories', methods=['GET'])
+  @requires_auth('get:categories')
+  def get_categories(token):
+    db_categories = Categories.query.all()
+    if len(db_categories) == 0:
+        categories = [] 
+    else:
+        categories = [category.format() for category in db_categories]
+    return jsonify({
+        "success": True,
+        "categories": categories
+    })
 
   # _________________________________________
   # Error Handlers

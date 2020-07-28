@@ -26,7 +26,7 @@ These are the production intent products for Mooves.
 Decks are collections of cards and are defined by a theme (e.g. bodyweight, bootcamp, strength, endurance, ...)
 
 '''
-class Deck(db.Model):  
+class Decks(db.Model):  
   __tablename__ = 'decks'
 
   id = Column(Integer, primary_key=True) 
@@ -72,7 +72,7 @@ Exercises are the building blocks for cards.
 They are the literal exercises someone would do (eg. pushups).
 
 '''
-class Exercise(db.Model):  
+class Exercises(db.Model):  
   __tablename__ = 'exercises'
 
   id = Column(Integer, primary_key=True) 
