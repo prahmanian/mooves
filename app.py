@@ -1,8 +1,19 @@
 import os
-from flask import Flask, request, abort, jsonify, json
+from flask import Flask, request, abort, jsonify, json, redirect, render_template, session, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from models import setup_db, Decks, Exercises, Categories
+from auth import *
+# Auth0 imports below
+from functools import wraps
+import json
+from os import environ as env
+from werkzeug.exceptions import HTTPException
+from dotenv import load_dotenv, find_dotenv
+from authlib.integrations.flask_client import OAuth
+from six.moves.urllib.parse import urlencode
+
+
 
 def create_app(test_config=None):
   # create and configure the app
@@ -10,6 +21,61 @@ def create_app(test_config=None):
   setup_db(app)
   CORS(app, resources={r"/*": {"origins":"*"}})
 
+  # _________________________________________
+  # Add Third Party Auth with Auth0
+  # _________________________________________
+  
+  oauth = OAuth(app)
+
+  auth0 = oauth.register(
+    'auth0',
+    client_id='TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj',
+    client_secret='o0JS29SfjNRFpp1jNSsYXU4fG9A_6PIhqPFu4pzvtgtYPiEIiK0x4tWsHQlbMU0z',
+    api_base_url='https://mooves.us.auth0.com',
+    access_token_url='https://mooves.us.auth0.com/oauth/token',
+    authorize_url='https://mooves.us.auth0.com/authorize',
+    client_kwargs={
+        'scope': 'openid profile email',
+    },
+  )
+  
+  # Here we're using the /callback route.
+  @app.route('/callback')
+  def callback_handling():
+    # Handles response from token endpoint
+    auth0.authorize_access_token()
+    resp = auth0.get('userinfo')
+    userinfo = resp.json()
+
+    # Store the user information in flask session.
+    session['jwt_payload'] = userinfo
+    session['profile'] = {
+        'user_id': userinfo['sub'],
+        'name': userinfo['name'],
+        'picture': userinfo['picture']
+    }
+    return redirect('/dashboard')
+
+  @app.route('/login')
+  def login():
+    return auth0.authorize_redirect(redirect_uri='http://mooves.us/callback') #TODO ensure this is right 
+
+  @app.route('/dashboard')
+  @requires_auth
+  def dashboard():
+    return render_template('dashboard.html',
+                           userinfo=session['profile'],
+                           userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
+
+  @app.route('/logout')
+  def logout():
+    # Clear session stored data
+    session.clear()
+    # Redirect user to logout endpoint
+    params = {'returnTo': url_for('home', _external=True), 'client_id': 'TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj'}
+    return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+  # _________________________________________
   @app.route('/')
   def get_greeting():
         excited = os.environ['EXCITED']
