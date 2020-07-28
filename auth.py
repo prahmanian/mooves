@@ -5,9 +5,10 @@ from jose import jwt
 from urllib.request import urlopen
 
 #My Values
-AUTH0_DOMAIN = 'pedram-fsnd.us.auth0.com'
+AUTH0_DOMAIN = 'mooves.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'coffeeshop' #TODO update 
+API_AUDIENCE = 'https://mooves.us/api'
+# Token expiration set for 30 days (2592000 sec)
 
 ## AuthError Exception
 '''
