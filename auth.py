@@ -7,7 +7,7 @@ from urllib.request import urlopen
 #My Values
 AUTH0_DOMAIN = 'pedram-fsnd.us.auth0.com'
 ALGORITHMS = ['RS256']
-API_AUDIENCE = 'coffeeshop'
+API_AUDIENCE = 'coffeeshop' #TODO update 
 
 ## AuthError Exception
 '''
