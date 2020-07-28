@@ -81,7 +81,7 @@ def create_app(test_config=None):
         excited = os.environ['EXCITED']
         greeting = "Hello" 
         if excited == 'true': greeting = greeting + "!!!!!"
-        return greeting
+        return render_template('home.html')
 
 
   # _________________________________________
