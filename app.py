@@ -25,6 +25,13 @@ def create_app(test_config=None):
   setup_db(app)
   CORS(app, resources={r"/*": {"origins":"*"}})
 
+  # CORS Headers 
+  @app.after_request
+  def after_request(response):
+      response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,true')
+      response.headers.add('Access-Control-Allow-Methods', 'GET,PATCH,POST,DELETE,OPTIONS')
+      return response
+
   # _________________________________________
   # Add Third Party Auth with Auth0
   # _________________________________________
