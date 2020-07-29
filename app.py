@@ -12,33 +12,54 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
-
+import constants
 
 
 def create_app(test_config=None):
   # create and configure the app
   app = Flask(__name__)
+  app.secret_key = constants.SECRET_KEY
+  app.debug = True
   setup_db(app)
   CORS(app, resources={r"/*": {"origins":"*"}})
 
   # _________________________________________
   # Add Third Party Auth with Auth0
   # _________________________________________
+  ENV_FILE = find_dotenv()
+  if ENV_FILE:
+    load_dotenv(ENV_FILE)
+
+  AUTH0_CALLBACK_URL = env.get(constants.AUTH0_CALLBACK_URL)
+  AUTH0_CLIENT_ID = env.get(constants.AUTH0_CLIENT_ID)
+  AUTH0_CLIENT_SECRET = env.get(constants.AUTH0_CLIENT_SECRET)
+  AUTH0_DOMAIN = env.get(constants.AUTH0_DOMAIN)
+  AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
+  AUTH0_AUDIENCE = env.get(constants.AUTH0_AUDIENCE)
   
   oauth = OAuth(app)
 
   auth0 = oauth.register(
     'auth0',
-    client_id='TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj',
-    client_secret='o0JS29SfjNRFpp1jNSsYXU4fG9A_6PIhqPFu4pzvtgtYPiEIiK0x4tWsHQlbMU0z',
-    api_base_url='https://mooves.us.auth0.com',
-    access_token_url='https://mooves.us.auth0.com/oauth/token',
-    authorize_url='https://mooves.us.auth0.com/authorize',
+    client_id=AUTH0_CLIENT_ID,
+    client_secret=AUTH0_CLIENT_SECRET,
+    api_base_url=AUTH0_BASE_URL,
+    access_token_url=AUTH0_BASE_URL + '/oauth/token',
+    authorize_url=AUTH0_BASE_URL + '/authorize',
     client_kwargs={
         'scope': 'openid profile email',
     },
-  )
+)
   
+  # _________________________________________
+  # Auth Controllers 
+  # _________________________________________
+
+  @app.route('/')
+  def home():
+        return render_template('home.html')
+
+
   # Here we're using the /callback route.
   @app.route('/callback')
   def callback_handling():
@@ -48,8 +69,10 @@ def create_app(test_config=None):
     userinfo = resp.json()
 
     # Store the user information in flask session.
-    session['jwt_payload'] = userinfo
-    session['profile'] = {
+    # session['jwt_payload'] = userinfo
+    session[constants.JWT_PAYLOAD] = userinfo
+    # session['profile'] = {
+    session[constants.PROFILE_KEY] = {
         'user_id': userinfo['sub'],
         'name': userinfo['name'],
         'picture': userinfo['picture']
@@ -58,30 +81,25 @@ def create_app(test_config=None):
 
   @app.route('/login')
   def login():
-    return auth0.authorize_redirect(redirect_uri='http://mooves.us/callback') #TODO ensure this is right 
+    return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
   @app.route('/dashboard')
   @requires_auth
   def dashboard():
     return render_template('dashboard.html',
-                           userinfo=session['profile'],
-                           userinfo_pretty=json.dumps(session['jwt_payload'], indent=4))
-
+                           userinfo=session[constants.PROFILE_KEY],
+                           userinfo_pretty=json.dumps(session[constants.JWT_PAYLOAD], indent=4))
+  
   @app.route('/logout')
   def logout():
     # Clear session stored data
     session.clear()
     # Redirect user to logout endpoint
-    params = {'returnTo': url_for('home', _external=True), 'client_id': 'TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj'}
+    params = {'returnTo': url_for('home', _external=True), 'client_id': AUTH0_CLIENT_ID}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
   # _________________________________________
-  @app.route('/')
-  def get_greeting():
-        excited = os.environ['EXCITED']
-        greeting = "Hello" 
-        if excited == 'true': greeting = greeting + "!!!!!"
-        return render_template('home.html')
+  
 
 
   # _________________________________________
