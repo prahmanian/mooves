@@ -19,3 +19,4 @@ Werkzeug==1.0.1
 python-dotenv
 requests
 authlib>=0.14.1
+python-jose
