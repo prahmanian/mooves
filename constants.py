@@ -6,3 +6,6 @@ AUTH0_AUDIENCE = 'https://mooves.us/api'
 PROFILE_KEY = 'profile'
 SECRET_KEY = 'gutenmade'
 JWT_PAYLOAD = 'jwt_payload'
+ALGORITHMS = ['RS256']
+API_AUDIENCE = 'https://mooves.us/api'
+# Token expiration set for 30 days (2592000 sec)

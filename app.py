@@ -1,9 +1,9 @@
 import os
-from flask import Flask, request, abort, jsonify, json, redirect, render_template, session, url_for
+from flask import Flask, request, abort, jsonify, json, redirect, render_template, session, url_for, _request_ctx_stack
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from models import setup_db, Decks, Exercises, Categories
-from auth import *
+# from auth import *
 # Auth0 imports below
 from functools import wraps
 import json
@@ -12,7 +12,9 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv, find_dotenv
 from authlib.integrations.flask_client import OAuth
 from six.moves.urllib.parse import urlencode
+from six.moves.urllib.request import urlopen
 import constants
+from jose import jwt
 
 
 def create_app(test_config=None):
@@ -43,7 +45,9 @@ def create_app(test_config=None):
   AUTH0_DOMAIN = env.get('AUTH0_DOMAIN')
   AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
   AUTH0_AUDIENCE = env.get('AUTH0_AUDIENCE')
-  
+  API_AUDIENCE = env.get('API_AUDIENCE')
+  ALGORITHMS = ['RS256']
+
   oauth = OAuth(app)
 
   auth0 = oauth.register(
@@ -56,8 +60,103 @@ def create_app(test_config=None):
     client_kwargs={
         'scope': 'openid profile email',
     },
-)
+  )
   
+  # AuthError Exception - A standardized way to communicate auth failure modes
+  class AuthError(Exception):
+    def __init__(self, error, status_code):
+        self.error = error
+        self.status_code = status_code
+
+  # Format error response and append status code
+  def get_token_auth_header():
+    """Obtains the Access Token from the Authorization Header
+    """
+    auth = request.headers.get("Authorization", None)
+    if not auth:
+        raise AuthError({"code": "authorization_header_missing",
+                        "description":
+                            "Authorization header is expected"}, 401)
+
+    parts = auth.split()
+
+    if parts[0].lower() != "bearer":
+        raise AuthError({"code": "invalid_header",
+                        "description":
+                            "Authorization header must start with"
+                            " Bearer"}, 401)
+    elif len(parts) == 1:
+        raise AuthError({"code": "invalid_header",
+                        "description": "Token not found"}, 401)
+    elif len(parts) > 2:
+        raise AuthError({"code": "invalid_header",
+                        "description":
+                            "Authorization header must be"
+                            " Bearer token"}, 401)
+
+    token = parts[1]
+    return token
+  
+  #Determines if the Access Token is valid
+  def requires_auth(f):
+    
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = get_token_auth_header()
+        jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+        jwks = json.loads(jsonurl.read())
+        unverified_header = jwt.get_unverified_header(token)
+        rsa_key = {}
+        for key in jwks["keys"]:
+            if key["kid"] == unverified_header["kid"]:
+                rsa_key = {
+                    "kty": key["kty"],
+                    "kid": key["kid"],
+                    "use": key["use"],
+                    "n": key["n"],
+                    "e": key["e"]
+                }
+        if rsa_key:
+            try:
+                payload = jwt.decode(
+                    token,
+                    rsa_key,
+                    algorithms=ALGORITHMS,
+                    audience=API_AUDIENCE,
+                    issuer="https://"+AUTH0_DOMAIN+"/"
+                )
+            except jwt.ExpiredSignatureError:
+                raise AuthError({"code": "token_expired",
+                                "description": "token is expired"}, 401)
+            except jwt.JWTClaimsError:
+                raise AuthError({"code": "invalid_claims",
+                                "description":
+                                    "incorrect claims,"
+                                    "please check the audience and issuer"}, 401)
+            except Exception:
+                raise AuthError({"code": "invalid_header",
+                                "description":
+                                    "Unable to parse authentication"
+                                    " token."}, 401)
+
+            _request_ctx_stack.top.current_user = payload
+            return f(*args, **kwargs)
+        raise AuthError({"code": "invalid_header",
+                        "description": "Unable to find appropriate key"}, 401)
+    return decorated
+  
+  # Determines if the required scope is present in the Access Token
+  # Args: required_scope (str): The scope required to access the resource
+  def requires_scope(required_scope):
+    token = get_token_auth_header()
+    unverified_claims = jwt.get_unverified_claims(token)
+    if unverified_claims.get("scope"):
+            token_scopes = unverified_claims["scope"].split()
+            for token_scope in token_scopes:
+                if token_scope == required_scope:
+                    return True
+    return False
+
   # _________________________________________
   # Auth Controllers 
   # _________________________________________
@@ -65,7 +164,6 @@ def create_app(test_config=None):
   @app.route('/')
   def home():
         return render_template('home.html')
-
 
   # Here we're using the /callback route.
   @app.route('/callback')
@@ -114,43 +212,58 @@ def create_app(test_config=None):
   # _________________________________________
   
   @app.route('/decks', methods=['GET'])
-  @requires_auth('get:decks')
-  def get_decks(token):
-    db_decks= Decks.query.all()
-    if len(db_decks) == 0:
-        decks = [] 
-    else:
-        decks = [deck.format() for deck in db_decks]
-    return jsonify({
-        "success": True,
-        "decks": decks
-    })
+  @requires_auth
+  def get_decks():
+    if requires_scope("get:decks"):
+      db_decks= Decks.query.all()
+      if len(db_decks) == 0:
+          decks = [] 
+      else:
+          decks = [deck.format() for deck in db_decks]
+      return jsonify({
+          "success": True,
+          "decks": decks
+      })
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
 
   @app.route('/exercises', methods=['GET'])
-  @requires_auth('get:exercises')
-  def get_exercises(token):
-    db_exercises= Exercises.query.all()
-    if len(db_exercises) == 0:
-        exercises = [] 
-    else:
-        exercises = [exercise.format() for exercise in db_exercises]
-    return jsonify({
-        "success": True,
-        "exercises": exercises
-    })
+  @requires_auth
+  def get_exercises():
+    if requires_scope("get:exercises"):
+      db_exercises= Exercises.query.all()
+      if len(db_exercises) == 0:
+          exercises = [] 
+      else:
+          exercises = [exercise.format() for exercise in db_exercises]
+      return jsonify({
+          "success": True,
+          "exercises": exercises
+      })
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
 
   @app.route('/categories', methods=['GET'])
-  @requires_auth('get:categories')
-  def get_categories(token):
-    db_categories = Categories.query.all()
-    if len(db_categories) == 0:
-        categories = [] 
-    else:
-        categories = [category.format() for category in db_categories]
-    return jsonify({
-        "success": True,
-        "categories": categories
-    })
+  @requires_auth
+  def get_categories():
+    if requires_scope("get:categories"):
+      db_categories = Categories.query.all()
+      if len(db_categories) == 0:
+          categories = [] 
+      else:
+          categories = [category.format() for category in db_categories]
+      return jsonify({
+          "success": True,
+          "categories": categories
+      })
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
 
   # _________________________________________
   # Error Handlers
