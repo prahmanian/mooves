@@ -320,7 +320,7 @@ def create_app(test_config=None):
 
   @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
   @requires_auth
-  def delete_deck(exercise_id):
+  def delete_exercise(exercise_id):
     if requires_scope("delete:exercise"):
       try:
         exercise = Exercises.query.filter(Exercises.id == exercise_id).one_or_none()
@@ -343,7 +343,7 @@ def create_app(test_config=None):
 
   @app.route('/categories/<int:category_id>', methods=['DELETE'])
   @requires_auth
-  def delete_deck(category_id):
+  def delete_category(category_id):
     if requires_scope("delete:category"):
       try:
         category = Categories.query.filter(Categories.id == category_id).one_or_none()
@@ -395,7 +395,7 @@ def create_app(test_config=None):
   # _________________________________________
 
   @app.route('/exercises/<int:exercise_id>', methods=['PATCH'])
-  def add_exercise(exercise_id):
+  def edit_exercise(exercise_id):
         data_string = request.data
         update_data = json.loads(data_string)
 
