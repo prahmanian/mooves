@@ -8,9 +8,9 @@ A user can thus draw and use a single card, or several for a longer workout.
 The purpose of this app is to deliver this same experience digitally.
 
 # App Location
-This app is deployed on Heroku at the following domains:
+This app is deployed on Heroku at the following domain:
 - https://mooves.herokuapp.com/
-- http://mooves.us/
+
 
 # Roles and Permissions
 Registered User Roles
@@ -20,3 +20,22 @@ Registered User Roles
 Public Permissions
 1) GET:Decks
 
+
+# Models and Endpoints
+## Decks
+- GET '/decks'
+- DELETE '/decks/<int:deck_id>'
+- POST '/decks'
+- PATCH 'decks/<int:deck_id>'
+
+## Exercises
+- GET '/exercises'
+- DELETE '/decexercisesks/<int:exercise_id>'
+- POST '/decexercisesks'
+- PATCH 'decexercisesks/<int:exercise_id>'
+
+## Categories
+- GET '/categories'
+- DELETE '/categories/<int:category_id>'
+- POST '/categories'
+- PATCH 'categories/<int:category_id>'
