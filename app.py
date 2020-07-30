@@ -364,6 +364,34 @@ def create_app(test_config=None):
         "description": "You don't have access to this resource"
     }, 403)
 
+
+  # _________________________________________
+  # POST Routes
+  # _________________________________________
+
+  @app.route('/exercises', methods=['POST'])
+  def add_exercise():
+        data_string = request.data
+        new_exercise_data = json.loads(data_string)
+
+        name = new_exercise_data['name']
+        prompt = new_exercise_data['prompt']
+        level = new_exercise_data['level']
+
+
+       
+
+        try:
+           new_exercise = Exercises(name, prompt, level)
+           new_exercise.insert()
+           return jsonify({
+            'success':True
+            })
+        except:
+          abort(422)
+
+  
+
   # _________________________________________
   # Error Handlers
   # _________________________________________
