@@ -254,6 +254,23 @@ def create_app(test_config=None):
         "description": "You don't have access to this resource"
     }, 403)
 
+  @app.route('/exercises/<int:exercise_id>', methods=['GET'])
+  @requires_auth
+  def get_exercises(exercise_id):
+    if requires_scope("get:exercises"):
+          exercise= Exercises.query.filter(Exercises.id == exercise_id).one_or_none()
+          if exercise is None:
+                abort(404)
+          exercise = exercise.format()
+          return jsonify({
+          "success": True,
+          "exercise": exercise
+          })
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
+
   @app.route('/categories', methods=['GET'])
   @requires_auth
   def get_categories():
@@ -267,6 +284,81 @@ def create_app(test_config=None):
           "success": True,
           "categories": categories
       })
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
+
+
+  # _________________________________________
+  # Delete Routes
+  # _________________________________________
+  
+  @app.route('/decks/<int:deck_id>', methods=['DELETE'])
+  @requires_auth
+  def delete_deck(deck_id):
+    if requires_scope("delete:decks"):
+      try:
+        deck = Decks.query.filter(Decks.id == deck_id).one_or_none()
+        if deck is None:
+          abort(404)
+        deck.delete()
+        decks = [deck.format() for deck in Decks.query.all()]
+
+        return jsonify({
+          "success": True,
+          "deleted": deck_id,
+          "decks": decks
+        })
+      except:
+        abort(422)
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
+
+
+  @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
+  @requires_auth
+  def delete_deck(exercise_id):
+    if requires_scope("delete:exercise"):
+      try:
+        exercise = Exercises.query.filter(Exercises.id == exercise_id).one_or_none()
+        if exercise is None:
+          abort(404)
+        exercise.delete()
+        exercises = [exercise.format() for exercise in Exercises.query.all()]
+
+        return jsonify({
+          "success": True,
+          "deleted": exercise_id,
+          "exercises": exercises
+        })
+      except:
+        abort(422)
+    raise AuthError({
+        "code": "Unauthorized",
+        "description": "You don't have access to this resource"
+    }, 403)
+
+  @app.route('/categories/<int:category_id>', methods=['DELETE'])
+  @requires_auth
+  def delete_deck(category_id):
+    if requires_scope("delete:category"):
+      try:
+        category = Categories.query.filter(Categories.id == category_id).one_or_none()
+        if category is None:
+          abort(404)
+        category.delete()
+        categories = [category.format() for category in Categories.query.all()]
+
+        return jsonify({
+          "success": True,
+          "deleted": category_id,
+          "categories": categories
+        })
+      except:
+        abort(422)
     raise AuthError({
         "code": "Unauthorized",
         "description": "You don't have access to this resource"
