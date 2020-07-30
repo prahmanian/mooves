@@ -390,7 +390,38 @@ def create_app(test_config=None):
         except:
           abort(422)
 
-  
+  # _________________________________________
+  # PATCH Routes
+  # _________________________________________
+
+  @app.route('/exercises/<int:exercise_id>', methods=['PATCH'])
+  def add_exercise(exercise_id):
+        data_string = request.data
+        update_data = json.loads(data_string)
+
+        exercise = Exercises.query.filter(Exercises.id == exercise_id).one_or_none()
+
+        if exercise is None:
+              abort(404)
+
+        name = update_data['name']
+        prompt = update_data['prompt']
+        level = update_data['level']
+
+        if name:
+              exercise.name = name
+        if prompt:
+              exercise.prompt = prompt
+        if level:
+              exercise.level = level
+
+        try:
+           exercise.update()
+           return jsonify({
+            'success':True
+            })
+        except:
+          abort(422)
 
   # _________________________________________
   # Error Handlers

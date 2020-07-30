@@ -24,10 +24,22 @@ class MoovesTestCase(unittest.TestCase):
             'requisites':'None'
         }
 
+        self.patch_deck = {
+            'code':'BW',
+            'name':'Bodyweight Heavyweight',
+            'theme': 'Bodyweight Only',
+            'description': 'Our no excuses deck!',
+            'requisites':'None'
+        }
+
         self.new_exercise = {
             'name':'Slow Down Pushups',
             'prompt':'In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up. ',
             'level':2,
+        }
+
+        self.patch_exercise = {
+            'level':1,
         }
 
         self.new_category = {
@@ -36,14 +48,13 @@ class MoovesTestCase(unittest.TestCase):
 
         }
 
-        self.searchTerm = {
-            'searchTerm':'boxer'
+        self.patch_category = {
+            'name':'Back',
+            'color':'#ffff00',
+
         }
 
-        self.quizzes = {
-            'previous_questions': [1,2],
-            'quiz_category': {'type':'Art', 'id':1}
-        }
+        
 
         # binds the app to the current context
         with self.app.app_context():
@@ -55,6 +66,32 @@ class MoovesTestCase(unittest.TestCase):
     def tearDown(self):
         """Executed after reach test"""
         pass
+
+    ##------ POST ENDPOINTS ------##
+    ##------ -------------- ------##
+
+    ##------ Tests for POST /exercises ------##
+
+    def test_add_exercise(self):
+        res = self.client().post('/exercises', json=self.new_exercise)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_405_exercise_creation(self):
+        res = self.client().post('/exercises/45', json=self.new_exercise)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 405)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'method not allowed')
+
+
+
+
+    ##------ GET ENDPOINTS ------##
+    ##------ ------------- ------##
 
     ##------ Tests for GET /decks ------##
     def test_get_decks(self):
@@ -109,6 +146,35 @@ class MoovesTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "Not found")  
 
+
+
+
+    ##------ PATCH ENDPOINTS ------##
+    ##------ --------------- ------##
+
+    ##------ Tests for PATCH /exercises/<int:exercise_id> ------##
+
+    def test_add_exercise(self):
+        res = self.client().patch('/exercises/1', json=self.patch_exercise)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_405_exercise_creation(self):
+        res = self.client().patch('/exercises/45', json=self.patch_exercise)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 405)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'method not allowed')
+
+
+
+
+    ##------ DELETE ENDPOINTS ------##
+    ##------ ---------------- ------##
+
     ##------ Tests for DELETE /decks/<int: deck_id> ------##
 
     def test_delete_decks(self):
@@ -123,8 +189,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertTrue('decks')
         self.assertEqual(deck, None)
 
-
-
     def test_delete_deck_not_found(self):
         res = self.client().delete('/decks/1000') 
         data = json.loads(res.data)
@@ -132,8 +196,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
-
-
 
     def test_delete_decks_not_allowed(self):
         res = self.client().delete('/decks') 
@@ -157,8 +219,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertTrue('exercises')
         self.assertEqual(exercise, None)
 
-
-
     def test_delete_exercises_not_found(self):
         res = self.client().delete('/exercises/1000') 
         data = json.loads(res.data)
@@ -166,8 +226,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
-
-
 
     def test_delete_exercises_not_allowed(self):
         res = self.client().delete('/exercises') 
@@ -191,8 +249,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertTrue('categories')
         self.assertEqual(category, None)
 
-
-
     def test_delete_categories_not_found(self):
         res = self.client().delete('/categories/1000') 
         data = json.loads(res.data)
@@ -201,8 +257,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "unprocessable")
 
-
-
     def test_delete_categories_not_allowed(self):
         res = self.client().delete('/categories') 
         data = json.loads(res.data)
@@ -210,3 +264,6 @@ class MoovesTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 405)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], "method not allowed")
+
+    
+    
