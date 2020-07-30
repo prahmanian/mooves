@@ -256,7 +256,7 @@ def create_app(test_config=None):
 
   @app.route('/exercises/<int:exercise_id>', methods=['GET'])
   @requires_auth
-  def get_exercises(exercise_id):
+  def get_exercise(exercise_id):
     if requires_scope("get:exercises"):
           exercise= Exercises.query.filter(Exercises.id == exercise_id).one_or_none()
           if exercise is None:
