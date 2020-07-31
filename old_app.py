@@ -162,233 +162,233 @@ def create_app(test_config=None):
         })
 
     # @app.route('/decks', methods=['GET'])
-    # @requires_auth("get:decks")
-    # def get_decks(token):
-    #     # if requires_scope("get:decks"):
-    #     db_decks = Decks.query.all()
-    #     if len(db_decks) == 0:
-    #         decks = []
-    #     else:
-    #         decks = [deck.format() for deck in db_decks]
-    #     return jsonify({
-    #         "success": True,
-    #         "decks": decks
-    #     })
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
-
-    @app.route('/exercises', methods=['GET'])
-    @cross_origin(headers=["Content-Type", "Authorization"])
-    @requires_auth("get:exercises")
-    def get_exercises(token):
-        # if requires_scope("get:exercises"):
-        db_exercises = Exercises.query.all()
-        if len(db_exercises) == 0:
-            exercises = []
-        else:
-            exercises = [exercise.format() for exercise in db_exercises]
-        return jsonify({
-            "success": True,
-            "exercises": exercises
-        })
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
-
-    # @app.route('/exercises/<int:exercise_id>', methods=['GET'])
     # @requires_auth
-    # def get_exercise(exercise_id):
-    #     if requires_scope("get:exercises"):
-    #         exercise = Exercises.query.filter(
-    #           Exercises.id == exercise_id).one_or_none()
-    #         if exercise is None:
-    #             abort(404)
-    #         exercise = exercise.format()
+    # def get_decks():
+    #     if requires_scope("get:decks"):
+    #         db_decks = Decks.query.all()
+    #         if len(db_decks) == 0:
+    #             decks = []
+    #         else:
+    #             decks = [deck.format() for deck in db_decks]
     #         return jsonify({
-    #           "success": True,
-    #           "exercise": exercise
-    #           })
+    #             "success": True,
+    #             "decks": decks
+    #         })
     #     raise AuthError({
     #         "code": "Unauthorized",
     #         "description": "You don't have access to this resource"
     #     }, 401)
 
-    @app.route('/categories', methods=['GET'])
-    @requires_auth("get:categories")
-    def get_categories(token):
-        # if requires_scope("get:categories"):
-        db_categories = Categories.query.all()
-        if len(db_categories) == 0:
-            categories = []
-        else:
-            categories = [category.format() for category in db_categories]
-        return jsonify({
-            "success": True,
-            "categories": categories
-        })
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
-
-    # # _________________________________________
-    # # Delete Routes
-    # # _________________________________________
-
-    @app.route('/decks/<int:deck_id>', methods=['DELETE'])
-    @requires_auth("delete:decks")
-    def delete_deck(token, deck_id):
-        # if requires_scope("delete:decks"):
-        try:
-            deck = Decks.query.filter(Decks.id == deck_id).one_or_none()
-            if deck is None:
-                abort(404)
-            deck.delete()
-            decks = [deck.format() for deck in Decks.query.all()]
-
+    @app.route('/exercises', methods=['GET'])
+    @cross_origin(headers=["Content-Type", "Authorization"])
+    @requires_auth
+    def get_exercises():
+        if requires_scope("get:exercises"):
+            db_exercises = Exercises.query.all()
+            if len(db_exercises) == 0:
+                exercises = []
+            else:
+                exercises = [exercise.format() for exercise in db_exercises]
             return jsonify({
-              "success": True,
-              "deleted": deck_id,
-              "decks": decks
+                "success": True,
+                "exercises": exercises
             })
-        except Exception:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(422)
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
 
-    @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
-    @requires_auth("delete:exercise")
-    def delete_exercise(tooken, exercise_id):
-        # if requires_scope("delete:exercise"):
-        try:
+    @app.route('/exercises/<int:exercise_id>', methods=['GET'])
+    @requires_auth
+    def get_exercise(exercise_id):
+        if requires_scope("get:exercises"):
             exercise = Exercises.query.filter(
               Exercises.id == exercise_id).one_or_none()
             if exercise is None:
                 abort(404)
-            exercise.delete()
-            exercises = [exercise.format() for
-                         exercise in Exercises.query.all()]
-
+            exercise = exercise.format()
             return jsonify({
               "success": True,
-              "deleted": exercise_id,
-              "exercises": exercises
+              "exercise": exercise
+              })
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
+
+    @app.route('/categories', methods=['GET'])
+    @requires_auth
+    def get_categories():
+        if requires_scope("get:categories"):
+            db_categories = Categories.query.all()
+            if len(db_categories) == 0:
+                categories = []
+            else:
+                categories = [category.format() for category in db_categories]
+            return jsonify({
+                "success": True,
+                "categories": categories
             })
-        except Exception:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(422)
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
+
+    # _________________________________________
+    # Delete Routes
+    # _________________________________________
+
+    @app.route('/decks/<int:deck_id>', methods=['DELETE'])
+    @requires_auth
+    def delete_deck(deck_id):
+        if requires_scope("delete:decks"):
+            try:
+                deck = Decks.query.filter(Decks.id == deck_id).one_or_none()
+                if deck is None:
+                    abort(404)
+                deck.delete()
+                decks = [deck.format() for deck in Decks.query.all()]
+
+                return jsonify({
+                  "success": True,
+                  "deleted": deck_id,
+                  "decks": decks
+                })
+            except Exception:
+                db.session.rollback()
+                print(sys.exc_info())
+                abort(422)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
+
+    @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
+    @requires_auth
+    def delete_exercise(exercise_id):
+        if requires_scope("delete:exercise"):
+            try:
+                exercise = Exercises.query.filter(
+                  Exercises.id == exercise_id).one_or_none()
+                if exercise is None:
+                    abort(404)
+                exercise.delete()
+                exercises = [exercise.format() for
+                             exercise in Exercises.query.all()]
+
+                return jsonify({
+                  "success": True,
+                  "deleted": exercise_id,
+                  "exercises": exercises
+                })
+            except Exception:
+                db.session.rollback()
+                print(sys.exc_info())
+                abort(422)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
 
     @app.route('/categories/<int:category_id>', methods=['DELETE'])
-    @requires_auth("delete:category")
-    def delete_category(token, category_id):
-        # if requires_scope("delete:category"):
-        try:
-            category = Categories.query.filter(
-              Categories.id == category_id).one_or_none()
-            if category is None:
-                abort(404)
-            category.delete()
-            categories = [category.format() for category
-                          in Categories.query.all()]
+    @requires_auth
+    def delete_category(category_id):
+        if requires_scope("delete:category"):
+            try:
+                category = Categories.query.filter(
+                  Categories.id == category_id).one_or_none()
+                if category is None:
+                    abort(404)
+                category.delete()
+                categories = [category.format() for category
+                              in Categories.query.all()]
 
-            return jsonify({
-              "success": True,
-              "deleted": category_id,
-              "categories": categories
-            })
-        except Exception:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(422)
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
+                return jsonify({
+                  "success": True,
+                  "deleted": category_id,
+                  "categories": categories
+                })
+            except Exception:
+                db.session.rollback()
+                print(sys.exc_info())
+                abort(422)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
 
-    # # _________________________________________
-    # # POST Routes
-    # # _________________________________________
+    # _________________________________________
+    # POST Routes
+    # _________________________________________
 
     @app.route('/exercises', methods=['POST'])
-    @requires_auth("post:exercise")
-    def add_exercise(token):
-        # if requires_scope("post:exercise"):
-        data_string = request.data
-        new_exercise_data = json.loads(data_string)
+    @requires_auth
+    def add_exercise():
+        if requires_scope("post:exercise"):
+            data_string = request.data
+            new_exercise_data = json.loads(data_string)
 
-        name = new_exercise_data['name']
-        prompt = new_exercise_data['prompt']
-        level = new_exercise_data['level']
+            name = new_exercise_data['name']
+            prompt = new_exercise_data['prompt']
+            level = new_exercise_data['level']
 
-        try:
-            new_exercise = Exercises(name, prompt, level)
-            new_exercise.insert()
-            return jsonify({
-              'success': True
-              })
-        except Exception:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(422)
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
+            try:
+                new_exercise = Exercises(name, prompt, level)
+                new_exercise.insert()
+                return jsonify({
+                  'success': True
+                  })
+            except Exception:
+                db.session.rollback()
+                print(sys.exc_info())
+                abort(422)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
 
-    # # _________________________________________
-    # # PATCH Routes
-    # # _________________________________________
+    # _________________________________________
+    # PATCH Routes
+    # _________________________________________
 
     @app.route('/exercises/<int:exercise_id>', methods=['PATCH'])
     @cross_origin(headers=["Content-Type", "Authorization"])
-    @requires_auth("patch:exercise")
-    def edit_exercise(token, exercise_id):
-        # if requires_scope("patch:exercise"):
-        data_string = request.data
-        update_data = json.loads(data_string)
+    @requires_auth
+    def edit_exercise(exercise_id):
+        if requires_scope("patch:exercise"):
+            data_string = request.data
+            update_data = json.loads(data_string)
 
-        exercise = Exercises.query.filter(
-          Exercises.id == exercise_id).one_or_none()
+            exercise = Exercises.query.filter(
+              Exercises.id == exercise_id).one_or_none()
 
-        if exercise is None:
-            abort(404)
+            if exercise is None:
+                abort(404)
 
-        name = update_data['name']
-        prompt = update_data['prompt']
-        level = update_data['level']
+            name = update_data['name']
+            prompt = update_data['prompt']
+            level = update_data['level']
 
-        if name:
-            exercise.name = name
-        if prompt:
-            exercise.prompt = prompt
-        if level:
-            exercise.level = level
+            if name:
+                exercise.name = name
+            if prompt:
+                exercise.prompt = prompt
+            if level:
+                exercise.level = level
 
-        try:
-            exercise.update()
-            return jsonify({
-              'success': True
-              })
-        except Exception:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(422)
-        # raise AuthError({
-        #     "code": "Unauthorized",
-        #     "description": "You don't have access to this resource"
-        # }, 401)
+            try:
+                exercise.update()
+                return jsonify({
+                  'success': True
+                  })
+            except Exception:
+                db.session.rollback()
+                print(sys.exc_info())
+                abort(422)
+        raise AuthError({
+            "code": "Unauthorized",
+            "description": "You don't have access to this resource"
+        }, 401)
 
     # _________________________________________
     # Error Handlers

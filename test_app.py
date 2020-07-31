@@ -6,6 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 from app import create_app
 from models import setup_db, Decks, Exercises, Categories
 
+# ATHLETE_TKN = os.environ['ATHLETE_TKN'] 
+# SUPERUSER_TKN = os.environ['SUPERUSER_TKN']  
+
+ATHLETE_TKN='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMzc3ZTgzMmNlYTMwMjIxMTQxNjBmIiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MjE1ODA3LCJleHAiOjE1OTYzMDIyMDcsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiXX0.21DygWps4r1Nl8eJdVzApJrJlN0G7ruoYTHXxsU9rAa_pEkcTKjCGR3rQW4ikgEgfh-ZHB257PLpzVoWXSp2paoyWkMhYjtVXz7XlwiDsDqf9IAAnXtuxk5JEpIgSNxPlkKdmr3xpB8LV1A2T1-njxqzuUw2Gw1Bx9VFeCC6qWk-mSP1GGP0-w0EyJ9CD3l1z6kzvKUzqwBmjFZU0T7ALDOU-NaXcDsqFy2f8GRuEMc_sTqw3Nx62l1oAyXInjq5pawhLvLqb7VY5T4FsevkUK56z6QLPq6c6jE3wBeTvsu5NMKY8gkgp4EhuX1AochMBcBSXx2UwNPFPPUTEEqvNQ'
+SUPERUSER_TKN='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc1MTM5LCJleHAiOjE1OTYxODIzMzksImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0.ob0v7ex6b5ESc_AghyYK3XSevY7BcJ_YwANvaumDUwpABC1Q7dw-ZYyb-ks9Icg5ttLze8gzYWXrDlB0K5Dm53_usjj59FoeBE_X0ZFAjllmuVQHgVlpvd1VtBtTd6RrjOCxZACETCGNTAqLDpFMvKWA32Nf2rAADocXeN1xQrA8LvhzKVwJNA15vwRShlzZ_98ck23FYGR6sJxcsddXv7iKF9NO6l9iaGMxmq0BBcvJVwFrvQiXhyvfAzeUEirYfzRxQ4dwkak_1ELvFNtZ07Y810cCSbf09apgtDOcLAajfR-0AJ3JFJxksPZcK3EERUZWlCPRSxVyocvEzpV_GA'
+SUPERUSER_TKN2='eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc1MTM5LCJleHAiOjE1OTYxODIzMzksImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0'
+SUPERUSER_TKN3='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MjA5OTc1LCJleHAiOjE1OTYyOTYzNzUsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0.nXoAUOCwYxi5u6YDHkCT6rnyduMSNHWqEIFYjrtjnORZu3Awd_2T_uUlni0bXVBTvVtlY1SC5H9CMAQwHJcuqWhWO3m6jbfai6zssaD_61FBr47n66Gg9ROIg9qjf4-ZqPMy1GZUbBZ0oAkv6UWFbovuRH06Bb16RMcVl3NhJ_vOs70iJVV3gHAres17bs1kKWWn75ItVjoXQyCsHoPqD-i-IlTJ53hW-9qr83PXbdxfl4SV0hjLyKyCDRV3rPl4FWWKNCogh-USf-diMLv1Ho1u93Bgn1YQihRZbDiMXaSaNOjV9pXZeEj4v5OJWLz7jvcoEmfJzjMhtg1WjLbrjw'
 
 class MoovesTestCase(unittest.TestCase):
 
@@ -123,9 +130,16 @@ class MoovesTestCase(unittest.TestCase):
         res = self.client().get('/exercises/300')
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 401)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], "Not found")
+        # self.assertEqual(data['message'], "Not found")
+
+    def test_athlete_get_exercises(self):
+        res = self.client().get(
+            '/exercises', headers={'Authorization': 'Bearer ' + str(SUPERUSER_TKN3)})
+        data = res.json
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
 
     # #------ Tests for GET /categories ------#
     def test_get_categories(self):

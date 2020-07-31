@@ -125,6 +125,10 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Slow Down Pushups\",\n    \"prompt\": \"In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.\" ,\n    \"level\": 2\n        }"
+						},
 						"url": {
 							"raw": "{{host}}/exercises",
 							"host": [
@@ -408,6 +412,10 @@
 						},
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Slow Down Pushups\",\n    \"prompt\": \"In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.\" ,\n    \"level\": 2\n}"
+						},
 						"url": {
 							"raw": "{{host}}/exercises",
 							"host": [
@@ -554,7 +562,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMzc3ZTgzMmNlYTMwMjIxMTQxNjBmIiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc3NTE1LCJleHAiOjE1OTYxODQ3MTUsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiXX0.o9YVtDPHmqKCP2GAQGHuiVEvhvco0F-UaE6cu3ms36q0CaLULBt3FQr_tZucTVFbo3TpTy5SKhzm16VrJ3Czp7tq1cD784U3ihZhPcIFB5KuIOIUeovCCjqebP5uSugbBtAXKZWeFJpOaa2j18c_k1r0M1fMy7buFm_6yrhPRVg1tfmYK6CHcOyF0PyfNIFN7L_93ZvWkKyDK4V5GEwnbJDiO5CYUYCTTnOOkOipQxXIUONmd-62dyqTZjst695UGyPA8qfwh6nMwsO9CDTE9eJ2ALSW_C2bP_txMDkz_SHpThklRi_JRNEJHV1ZDUd9w1OexjwUNsaJjtCNmkxVJA",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMzc3ZTgzMmNlYTMwMjIxMTQxNjBmIiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MjE1ODA3LCJleHAiOjE1OTYzMDIyMDcsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiXX0.21DygWps4r1Nl8eJdVzApJrJlN0G7ruoYTHXxsU9rAa_pEkcTKjCGR3rQW4ikgEgfh-ZHB257PLpzVoWXSp2paoyWkMhYjtVXz7XlwiDsDqf9IAAnXtuxk5JEpIgSNxPlkKdmr3xpB8LV1A2T1-njxqzuUw2Gw1Bx9VFeCC6qWk-mSP1GGP0-w0EyJ9CD3l1z6kzvKUzqwBmjFZU0T7ALDOU-NaXcDsqFy2f8GRuEMc_sTqw3Nx62l1oAyXInjq5pawhLvLqb7VY5T4FsevkUK56z6QLPq6c6jE3wBeTvsu5NMKY8gkgp4EhuX1AochMBcBSXx2UwNPFPPUTEEqvNQ",
 						"type": "string"
 					}
 				]
@@ -722,7 +730,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Water3\",\n    \"recipe\": {\n        \"name\": \"Water\",\n        \"color\": \"blue\",\n        \"parts\": 1\n    }\n}"
+							"raw": "{\n    \"name\": \"Slow Down Pushups\",\n    \"prompt\": \"In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.\" ,\n    \"level\": 2\n        }"
 						},
 						"url": {
 							"raw": "{{host}}/exercises",
@@ -769,7 +777,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\": \"Water5\"\n}"
+							"raw": "{\n    \"name\": \"Slow Down Pushups\",\n    \"prompt\": \"In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.\" ,\n    \"level\": 9\n        }"
 						},
 						"url": {
 							"raw": "{{host}}/exercises/1",
@@ -792,8 +800,8 @@
 							"script": {
 								"id": "1e1364d1-fc80-422b-b34e-468ae3311208",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 422\", function () {",
+									"    pm.response.to.have.status(422);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -856,8 +864,8 @@
 							"script": {
 								"id": "17708989-aa79-457b-901b-7b98cbc52b0e",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {",
-									"    pm.response.to.have.status(200);",
+									"pm.test(\"Status code is 422\", function () {",
+									"    pm.response.to.have.status(422);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -886,7 +894,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc1MTM5LCJleHAiOjE1OTYxODIzMzksImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0.ob0v7ex6b5ESc_AghyYK3XSevY7BcJ_YwANvaumDUwpABC1Q7dw-ZYyb-ks9Icg5ttLze8gzYWXrDlB0K5Dm53_usjj59FoeBE_X0ZFAjllmuVQHgVlpvd1VtBtTd6RrjOCxZACETCGNTAqLDpFMvKWA32Nf2rAADocXeN1xQrA8LvhzKVwJNA15vwRShlzZ_98ck23FYGR6sJxcsddXv7iKF9NO6l9iaGMxmq0BBcvJVwFrvQiXhyvfAzeUEirYfzRxQ4dwkak_1ELvFNtZ07Y810cCSbf09apgtDOcLAajfR-0AJ3JFJxksPZcK3EERUZWlCPRSxVyocvEzpV_GA",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MjA5OTc1LCJleHAiOjE1OTYyOTYzNzUsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0.nXoAUOCwYxi5u6YDHkCT6rnyduMSNHWqEIFYjrtjnORZu3Awd_2T_uUlni0bXVBTvVtlY1SC5H9CMAQwHJcuqWhWO3m6jbfai6zssaD_61FBr47n66Gg9ROIg9qjf4-ZqPMy1GZUbBZ0oAkv6UWFbovuRH06Bb16RMcVl3NhJ_vOs70iJVV3gHAres17bs1kKWWn75ItVjoXQyCsHoPqD-i-IlTJ53hW-9qr83PXbdxfl4SV0hjLyKyCDRV3rPl4FWWKNCogh-USf-diMLv1Ho1u93Bgn1YQihRZbDiMXaSaNOjV9pXZeEj4v5OJWLz7jvcoEmfJzjMhtg1WjLbrjw",
 						"type": "string"
 					}
 				]
@@ -940,7 +948,7 @@
 	],
 	"variable": [
 		{
-			"id": "5aa92136-222d-42a3-b77f-2d6fb6bda581",
+			"id": "aa72c8e1-eadd-4f6c-93fe-557f5b9d5a17",
 			"key": "host",
 			"value": "localhost:5000"
 		}

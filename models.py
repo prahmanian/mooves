@@ -29,7 +29,7 @@ Extend the base Model class to add common methods
 
 class modelMethods(db.Model):
     __abstract__ = True
-    
+
     def insert(self):
         db.session.add(self)
         db.session.commit()
