@@ -76,7 +76,7 @@ The JWT token contains the permissions for the 'user' and 'seller' roles.
 
 ## Roles and Permissions
 Registered User Roles
-1) Superuser - full access to all endpoints. Must be assigned manually.
+### Superuser - full access to all endpoints. Must be assigned manually.
 - get:decks
 - get:exercises
 - get:categories
@@ -86,31 +86,173 @@ Registered User Roles
 - post:exercise
 - patch:exercise
 
+#### Getting Fresh Superuser Token
+1. Go to https://mooves.herokuapp.com
+2. Click on Login and enter the following credentials into Auth0, which has been designated with Superuser role:
+   Email: pedram+moovesadmin@gutenmade.com
+   Password: M00v3$2020
 
-2) Athlete - read only access to all GET endpoints.
+#### Sample Superuser JWT
+
+### Athlete - read only access to all GET endpoints.
 - get:decks
 - get:exercises
 - get:categories
 
-Public Permissions
-1) GET:Decks
+#### Getting Fresh Athlete Token
+1. Go to https://mooves.herokuapp.com
+2. Click on Login and enter the following credentials into Auth0, which has been designated with Superuser role:
+   Email: pedram+moovesathlete@gutenmade.com
+   Password: M00v3$2020
+
+#### Sample Athlete JWT
+
+### Public Permissions
+- get:decks
+
+ 
 
 
-# Models and Endpoints
-## Decks
-- GET '/decks'
-- DELETE '/decks/<int:deck_id>'
-- POST '/decks'
-- PATCH 'decks/<int:deck_id>'
+## Models and Endpoints
 
-## Exercises
-- GET '/exercises'
-- DELETE '/decexercisesks/<int:exercise_id>'
-- POST '/decexercisesks'
-- PATCH 'decexercisesks/<int:exercise_id>'
+### Decks
 
-## Categories
-- GET '/categories'
-- DELETE '/categories/<int:category_id>'
-- POST '/categories'
-- PATCH 'categories/<int:category_id>'
+#### GET '/decks'
+Returns a list of all decks in the database, and a success value. This endpoint is accessible to authenticated users.
+Sample curl: 
+curl -i -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" http://localhost:5000/decks 
+Sample response output:
+{
+  "decks": [
+    {
+        'id': 1,
+        'code': 'BW',
+        'name': 'Bodyweight Heavyweight',
+        'theme': 'Bodyweight Only',
+        'description': 'Our no excuses deck!',
+        'requisites': 'None'
+    }
+  ],
+  "success": true
+}
+
+#### DELETE '/decks/<int:deck_id>'
+Returns a list of all decks after deleting the requested deck, a success value, and the id of the deleted deck.
+This endpoint is accessible to users with the Superuser role permissions.
+Sample curl:
+curl http://localhost:5000/decks/1 -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" 
+{
+  "decks": [],
+  "success": true,
+  "deleted": 1
+}
+
+- Future Endpoints
+#### POST '/decks'
+#### PATCH '/decks/<int:deck_id>'
+
+### Exercises
+
+#### GET '/exercises'
+Returns a list of all exercises in the database, and a success value. This endpoint is accessible to authenticated users.
+Sample curl: 
+curl -i -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" http://localhost:5000/exercises 
+Sample response output:
+{
+  "exercises": [
+    {
+        'id': 1,
+        'name': 'Slow Down Pushups',
+        'prompt': 'In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.',
+        'level': 2
+    },
+    {
+        'id': 2,
+        'name': 'Good Mornings',
+        'prompt': 'Stand upright with feet shoulderwidth apart, hinge at the hips down near a 90 degree angle.',
+        'level': 1
+    }
+  ],
+  "success": true
+}
+
+#### GET '/exercises/<int:exercise_id>'
+Returns an object with the requested exercise object and a success value. This endpoint is accessible to authenticated users.
+Sample curl: 
+curl -i -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" http://localhost:5000/exercises/1 
+Sample response output:
+{
+  "exercise": {
+        'id': 1,
+        'name': 'Slow Down Pushups',
+        'prompt': 'In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up.',
+        'level': 2
+    },
+  "success": true
+}
+
+#### DELETE '/exercises/<int:exercise_id>'
+Returns a list of all exercises after deleting the requested exercise, a success value, and the id of the deleted exercise.
+This endpoint is accessible to users with the Superuser role permissions.
+Sample curl:
+curl http://localhost:5000/exercises/1 -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" 
+{
+  "exercises": [],
+  "success": true,
+  "deleted": 1
+}
+
+#### POST '/exercises'
+Returns a success value after creating and posting a new exercise.
+This endpoint is accessible to users with the Superuser role permissions.
+Sample curl: 
+curl http://localhost:5000/exercises -X POST -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" -d '{"name":"Slow Down Pushups", "level": 2, "prompt": "In normal pushup formation, lower yourself slowly, counting to 5, then explosively push up."}'
+
+Sample response output:
+{
+  "success": true,
+}
+
+#### PATCH 'exercises/<int:exercise_id>'
+Returns a success value after updating the requested exercise.
+This endpoint is accessible to users with the Superuser role permissions.
+Sample curl: 
+curl http://localhost:5000/exercises/1 -X POST -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" -d '{"level": 5}'
+
+Sample response output:
+{
+  "success": true,
+}
+
+### Categories
+
+#### GET '/categories'
+Returns a list of all categories in the database, and a success value. This endpoint is accessible to authenticated users.
+Sample curl: 
+curl -i -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" http://localhost:5000/categories 
+Sample response output:
+{
+  "categories": [
+    {
+        'id': 1,
+        'name': 'Back',
+        'color': '#ff0000',
+    }
+  ],
+  "success": true
+}
+
+#### DELETE '/categories/<int:category_id>'
+Returns a list of all categories after deleting the requested category, a success value, and the id of the deleted category.
+This endpoint is accessible to users with the Superuser role permissions.
+Sample curl:
+curl http://localhost:5000/categories/1 -X DELETE -H "Content-Type: application/json" -H "Authorization: Bearer {INSERT_TOKEN_HERE}" 
+{
+  "categories": [],
+  "success": true,
+  "deleted": 1
+}
+
+- Future Endpoints
+#### POST '/categories'
+#### PATCH '/categories/<int:category_id>'
