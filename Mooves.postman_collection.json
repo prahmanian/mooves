@@ -1,0 +1,949 @@
+{
+	"info": {
+		"_postman_id": "ff74e7c1-8d65-4daf-9ad1-586f80cfdaec",
+		"name": "Mooves",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "public",
+			"item": [
+				{
+					"name": "/decks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d042b463-46a6-4001-918f-c92cf7b85b4a",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains decks array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.decks).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ab782d0e-f575-493d-8cd6-60b4a45f0a9e",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9cf3bde1-d878-43a3-9e7d-861189044e6f",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f27da70d-518b-4d37-beaf-73dfb996cd84",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "23d6afd7-fd5d-4330-a758-916cb1ef29ca",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/decks/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fc7b919a-1b7c-497b-b904-7a301e63ee38",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4339d248-9a2c-41ba-81ec-06ffd545f480",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2a2fd6da-3a84-4a87-88f5-286bb485c5c7",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "athlete",
+			"item": [
+				{
+					"name": "/decks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ad5a281d-d0eb-4d54-a451-7cb20eb54ecd",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains decks array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.decks).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f5c707d0-b108-4061-86b8-b5d26e94586b",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains exercises array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.exercises).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f041d67e-dc75-4d44-988b-231bd3d52191",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains categories array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.categories).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "253f3dad-696f-4a17-b7c4-980645fb5548",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6Ik4wTkNOVEEzTWpaQ1FUa3lRMEl6TmtORk0wWXhRVFUwT1RFMFFVVkNSRUpDT1RBME1EUXpOUSJ9.eyJpc3MiOiJodHRwczovL3VkYWNpdHktZnNuZC5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDY3MTQ4MTQ0MTcwNjk3MTI4OTMiLCJhdWQiOlsiZGV2IiwiaHR0cHM6Ly91ZGFjaXR5LWZzbmQuYXV0aDAuY29tL3VzZXJpbmZvIl0sImlhdCI6MTU2MDg5MDE2MCwiZXhwIjoxNTYwODk3MzYwLCJhenAiOiJPSjVwQk9ZSURFa09FVFVmUWo1ajdsSDZFTFcwMkd1MCIsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6ZHJpbmtzIiwiZ2V0OmRyaW5rcy1kZXRhaWwiXX0.j9ocW47_exQOkEa10ffh8eijGvrIMxnGRzCmbrXnfaN_8ULsgA7AnWYMtvP8RmPWvT9n8sReWnFuJajUHBUbnBO2GuJ4aM3-WDUBeJT0X_mpGUWs4lxaNTbIkWdiWPTsEiRnP3wT-dU_v3Olw2PB4UMajMIjSH-IdF2Y1CiJIOaM0gV44RGZRyRvj6C2_mOkMfoXxzw-HrVvTRCo1NcUPea5Bs04POni7azx-B7FstP_HLm0dEbbge4XbmovHwlIXknIoI8PbuGXeLBqE2hv8fErKFBuIykxzK0nErH5zSPCrkM-_9smb8TLGAH-E5j1KQb6SHDKtcV_QHnsUYFuXA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0c1a6218-cce7-4abb-a50f-053efc2dbd1a",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/decks/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b7272cd6-15e0-43e2-8e4d-d23aae8f690b",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1cda55cc-98bd-4f16-9fc8-4cc1a6f01395",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "3611a46f-d3aa-494d-b707-05e7f903b058",
+								"exec": [
+									"pm.test(\"Status code is 401\", function () {",
+									"    pm.response.to.have.status(401);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMzc3ZTgzMmNlYTMwMjIxMTQxNjBmIiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc3NTE1LCJleHAiOjE1OTYxODQ3MTUsImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiXX0.o9YVtDPHmqKCP2GAQGHuiVEvhvco0F-UaE6cu3ms36q0CaLULBt3FQr_tZucTVFbo3TpTy5SKhzm16VrJ3Czp7tq1cD784U3ihZhPcIFB5KuIOIUeovCCjqebP5uSugbBtAXKZWeFJpOaa2j18c_k1r0M1fMy7buFm_6yrhPRVg1tfmYK6CHcOyF0PyfNIFN7L_93ZvWkKyDK4V5GEwnbJDiO5CYUYCTTnOOkOipQxXIUONmd-62dyqTZjst695UGyPA8qfwh6nMwsO9CDTE9eJ2ALSW_C2bP_txMDkz_SHpThklRi_JRNEJHV1ZDUd9w1OexjwUNsaJjtCNmkxVJA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ffcc5e40-6046-42af-ba91-4b4aca02b1b3",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f337e3f-6fbd-4bff-b2b8-b741c8d71c25",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "manager",
+			"item": [
+				{
+					"name": "/decks",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "25fed623-21e3-4808-ba87-94d48d2296cc",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains decks array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.decks).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f52515e2-7c1f-445a-8f8a-4a68224ca171",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains exercises array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.exercises).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "f1acbae9-f5cb-4a8c-8834-1840d14fd1cd",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"value contains categories array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.categories).to.be.an('array')",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "123aa902-e7d4-44c7-93e4-2d5859ffcc8d",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Water3\",\n    \"recipe\": {\n        \"name\": \"Water\",\n        \"color\": \"blue\",\n        \"parts\": 1\n    }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/exercises",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a95306c-b54d-47e2-908b-fd7909094d8f",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"// pm.test(\"value contains exercise array\", function () {",
+									"//     var jsonData = pm.response.json();",
+									"//     pm.expect(jsonData.exercises).to.be.an('array')",
+									"// });"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Water5\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/decks/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1e1364d1-fc80-422b-b34e-468ae3311208",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/decks/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"decks",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/exercises/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "dba9f8a4-64a7-4bf9-8c43-bdd10f1a7893",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/exercises/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"exercises",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/categories/1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "17708989-aa79-457b-901b-7b98cbc52b0e",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/categories/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Img5eFZXTDJ2aWFLNFF1UVh3TmhVMiJ9.eyJpc3MiOiJodHRwczovL21vb3Zlcy51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NWYyMDgyZGNkOTNjMTAwMDNkY2IxOTc1IiwiYXVkIjoiaHR0cHM6Ly9tb292ZXMudXMvYXBpIiwiaWF0IjoxNTk2MTc1MTM5LCJleHAiOjE1OTYxODIzMzksImF6cCI6IlRRalJXNVVZaFBYVEI3WU0xWWtaalJoWWJ0T3J1T2hqIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6WyJkZWxldGU6Y2F0ZWdvcnkiLCJkZWxldGU6ZGVja3MiLCJkZWxldGU6ZXhlcmNpc2UiLCJnZXQ6Y2F0ZWdvcmllcyIsImdldDpkZWNrcyIsImdldDpleGVyY2lzZXMiLCJwYXRjaDpleGVyY2lzZSIsInBvc3Q6ZXhlcmNpc2UiXX0.ob0v7ex6b5ESc_AghyYK3XSevY7BcJ_YwANvaumDUwpABC1Q7dw-ZYyb-ks9Icg5ttLze8gzYWXrDlB0K5Dm53_usjj59FoeBE_X0ZFAjllmuVQHgVlpvd1VtBtTd6RrjOCxZACETCGNTAqLDpFMvKWA32Nf2rAADocXeN1xQrA8LvhzKVwJNA15vwRShlzZ_98ck23FYGR6sJxcsddXv7iKF9NO6l9iaGMxmq0BBcvJVwFrvQiXhyvfAzeUEirYfzRxQ4dwkak_1ELvFNtZ07Y810cCSbf09apgtDOcLAajfR-0AJ3JFJxksPZcK3EERUZWlCPRSxVyocvEzpV_GA",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "434e33a3-7f61-430c-9207-8339e21e8c65",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "6dd600e0-9ac4-45b8-a357-29d25e2a2ad7",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "56a30fc1-6bbf-4bd5-a4d9-f619959b1fcb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "7895cef2-c6c9-4024-bf1a-72aae383acca",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "22388280-b94b-4285-8a36-a4d10ec6e190",
+			"key": "host",
+			"value": "localhost:5000"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -81,12 +81,19 @@ def create_app(test_config=None):
           'scope': 'openid profile email',
       },
     )
+    # https://mooves.us.auth0.com/authorize?audience=https://mooves.us/api&response_type=token&client_id=TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj&redirect_uri=http://127.0.0.1:5000/callback
 
     # AuthError Exception: A standardized way to communicate auth failure modes
     class AuthError(Exception):
         def __init__(self, error, status_code):
             self.error = error
             self.status_code = status_code
+
+    @app.errorhandler(Exception)
+    def handle_auth_error(ex):
+        response = jsonify(message=str(ex))
+        response.status_code = (ex.code if isinstance(ex, HTTPException) else 500)
+        return response
 
     # Format error response and append status code
     def get_token_auth_header():
@@ -118,52 +125,62 @@ def create_app(test_config=None):
         return token
 
     # Determines if the Access Token is valid
-    def requires_auth(f):
 
+    def requires_auth(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-            token = get_token_auth_header()
-            jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
-            jwks = json.loads(jsonurl.read())
-            unverified_header = jwt.get_unverified_header(token)
-            rsa_key = {}
-            for key in jwks["keys"]:
-                if key["kid"] == unverified_header["kid"]:
-                    rsa_key = {
-                        "kty": key["kty"],
-                        "kid": key["kid"],
-                        "use": key["use"],
-                        "n": key["n"],
-                        "e": key["e"]
-                    }
-            if rsa_key:
-                try:
-                    payload = jwt.decode(
-                        token,
-                        rsa_key,
-                        algorithms=ALGORITHMS,
-                        audience=API_AUDIENCE,
-                        issuer="https://"+AUTH0_DOMAIN+"/"
-                    )
-                except jwt.ExpiredSignatureError:
-                    raise AuthError({"code": "token_expired",
-                                    "description": "token is expired"}, 401)
-                except jwt.JWTClaimsError:
-                    raise AuthError({"code": "invalid_claims",
-                                    "description":
-                                        "incorrect claims,"
-                                        "please check the audience and issuer"}, 401)
-                except Exception:
-                    raise AuthError({"code": "invalid_header",
-                                    "description":
-                                        "Unable to parse authentication"
-                                        " token."}, 401)
+            if constants.PROFILE_KEY not in session:
+                return redirect('/login')
+            return f(*args, **kwargs)
 
-                _request_ctx_stack.top.current_user = payload
-                return f(*args, **kwargs)
-            raise AuthError({"code": "invalid_header",
-                            "description": "Unable to find appropriate key"}, 401)
         return decorated
+
+    # def requires_auth(f):
+
+    #     @wraps(f)
+    #     def decorated(*args, **kwargs):
+    #         token = get_token_auth_header()
+    #         jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+    #         jwks = json.loads(jsonurl.read())
+    #         unverified_header = jwt.get_unverified_header(token)
+    #         rsa_key = {}
+    #         for key in jwks["keys"]:
+    #             if key["kid"] == unverified_header["kid"]:
+    #                 rsa_key = {
+    #                     "kty": key["kty"],
+    #                     "kid": key["kid"],
+    #                     "use": key["use"],
+    #                     "n": key["n"],
+    #                     "e": key["e"]
+    #                 }
+    #         if rsa_key:
+    #             try:
+    #                 payload = jwt.decode(
+    #                     token,
+    #                     rsa_key,
+    #                     algorithms=ALGORITHMS,
+    #                     audience=API_AUDIENCE,
+    #                     issuer="https://"+AUTH0_DOMAIN+"/"
+    #                 )
+    #             except jwt.ExpiredSignatureError:
+    #                 raise AuthError({"code": "token_expired",
+    #                                 "description": "token is expired"}, 401)
+    #             except jwt.JWTClaimsError:
+    #                 raise AuthError({"code": "invalid_claims",
+    #                                 "description":
+    #                                     "incorrect claims,"
+    #                                     "please check the audience and issuer"}, 401)
+    #             except Exception:
+    #                 raise AuthError({"code": "invalid_header",
+    #                                 "description":
+    #                                     "Unable to parse authentication"
+    #                                     " token."}, 401)
+
+    #             _request_ctx_stack.top.current_user = payload
+    #             return f(*args, **kwargs)
+    #         raise AuthError({"code": "invalid_header",
+    #                         "description": "Unable to find appropriate key"}, 401)
+    #     return decorated
 
     # Determines if the required scope is present in the Access Token
     # Args: required_scope (str): The scope required to access the resource
@@ -186,7 +203,7 @@ def create_app(test_config=None):
         return render_template('home.html')
 
     # Here we're using the /callback route.
-    @app.route('/callback')
+    @app.route('/callback', methods=['GET', 'POST'])
     def callback_handling():
         # Handles response from token endpoint
         auth0.authorize_access_token()
@@ -196,6 +213,7 @@ def create_app(test_config=None):
         # Store the user information in flask session.
         # session['jwt_payload'] = userinfo
         session[constants.JWT_PAYLOAD] = userinfo
+        print(session[constants.JWT_PAYLOAD])
         # session['profile'] = {
         session[constants.PROFILE_KEY] = {
             'user_id': userinfo['sub'],
@@ -209,7 +227,7 @@ def create_app(test_config=None):
         return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
     @app.route('/dashboard')
-    @requires_auth
+    # @requires_auth
     def dashboard():
         return render_template('dashboard.html',
                                userinfo=session[constants.PROFILE_KEY],
@@ -228,22 +246,35 @@ def create_app(test_config=None):
     # _________________________________________
 
     @app.route('/decks', methods=['GET'])
-    @requires_auth
     def get_decks():
-        if requires_scope("get:decks"):
-            db_decks = Decks.query.all()
-            if len(db_decks) == 0:
-                decks = []
-            else:
-                decks = [deck.format() for deck in db_decks]
-            return jsonify({
-                "success": True,
-                "decks": decks
-            })
-        raise AuthError({
-            "code": "Unauthorized",
-            "description": "You don't have access to this resource"
-        }, 403)
+
+        db_decks = Decks.query.all()
+        if len(db_decks) == 0:
+            decks = []
+        else:
+            decks = [deck.format() for deck in db_decks]
+        return jsonify({
+            "success": True,
+            "decks": decks
+        })
+
+    # @app.route('/decks', methods=['GET'])
+    # @requires_auth
+    # def get_decks():
+    #     if requires_scope("get:decks"):
+    #         db_decks = Decks.query.all()
+    #         if len(db_decks) == 0:
+    #             decks = []
+    #         else:
+    #             decks = [deck.format() for deck in db_decks]
+    #         return jsonify({
+    #             "success": True,
+    #             "decks": decks
+    #         })
+    #     raise AuthError({
+    #         "code": "Unauthorized",
+    #         "description": "You don't have access to this resource"
+    #     }, 401)
 
     @app.route('/exercises', methods=['GET'])
     @requires_auth
@@ -261,7 +292,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     @app.route('/exercises/<int:exercise_id>', methods=['GET'])
     @requires_auth
@@ -278,7 +309,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     @app.route('/categories', methods=['GET'])
     @requires_auth
@@ -296,7 +327,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     # _________________________________________
     # Delete Routes
@@ -325,7 +356,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     @app.route('/exercises/<int:exercise_id>', methods=['DELETE'])
     @requires_auth
@@ -350,7 +381,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     @app.route('/categories/<int:category_id>', methods=['DELETE'])
     @requires_auth
@@ -376,7 +407,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     # _________________________________________
     # POST Routes
@@ -406,7 +437,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     # _________________________________________
     # PATCH Routes
@@ -447,7 +478,7 @@ def create_app(test_config=None):
         raise AuthError({
             "code": "Unauthorized",
             "description": "You don't have access to this resource"
-        }, 403)
+        }, 401)
 
     # _________________________________________
     # Error Handlers
@@ -500,4 +531,4 @@ mooves_app = create_app()
 
 
 if __name__ == '__main__':
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+    mooves_app.run(host='127.0.0.1', port=5000, debug=True)

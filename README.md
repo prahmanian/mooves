@@ -54,6 +54,14 @@ This will install all of the required packages included in the requirements.txt 
 
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server. 
 
+#### Export Configuration Variables
+
+Once you've installed the dependencies, you should export the local configuration variables located in the setup.sh file.
+
+```bash
+source setup.sh
+```
+
 ## Running the server
 
 To run the server, execute:
@@ -72,7 +80,7 @@ Auth0 is set up and running. The following configurations are in a .env file whi
 - The Auth0 Domain Name
 - The JWT code signing secret
 - The Auth0 Client ID
-The JWT token contains the permissions for the 'user' and 'seller' roles.
+The JWT token contains the permissions for the 'athlete' and 'superuser' roles.
 
 ## Roles and Permissions
 Registered User Roles
@@ -87,7 +95,7 @@ Registered User Roles
 - patch:exercise
 
 #### Getting Fresh Superuser Token
-1. Go to https://mooves.herokuapp.com
+1. Go to https://mooves.herokuapp.com (https://mooves.us.auth0.com/authorize?audience=https://mooves.us/api&response_type=token&client_id=TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj&redirect_uri=http://127.0.0.1:5000/callback)
 2. Click on Login and enter the following credentials into Auth0, which has been designated with Superuser role:
    Email: pedram+moovesadmin@gutenmade.com
    Password: M00v3$2020
@@ -100,7 +108,7 @@ Registered User Roles
 - get:categories
 
 #### Getting Fresh Athlete Token
-1. Go to https://mooves.herokuapp.com
+1. Go to https://mooves.herokuapp.com (https://mooves.us.auth0.com/authorize?audience=https://mooves.us/api&response_type=token&client_id=TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj&redirect_uri=http://127.0.0.1:5000/callback)
 2. Click on Login and enter the following credentials into Auth0, which has been designated with Superuser role:
    Email: pedram+moovesathlete@gutenmade.com
    Password: M00v3$2020
@@ -111,7 +119,27 @@ Registered User Roles
 - get:decks
 
  
+ ## Testing
+Unit tests are provided in test_app.py. To run this file use:
+'''
+dropdb mooves_test
+createdb mooves_test
+python test_app.py
+'''
 
+Further, the file 'Mooves.postman_collection.json' contains postman tests containing tokens for specific roles.
+To run this file, follow the steps:
+1. Go to postman application.
+2. Load the collection --> Import -> directory/warranty-tracker-test-endpoints.postman_collection.json
+3. Click on the runner, select the collection and run all the tests.
+
+## Data Modeling
+The schema for the database and helper methods to simplify API behavior are in models.py:
+- There are three tables created: Decks, Exercises, and Categories
+- Decks are the collections of workout cards.
+- Exercises are the building blocks of the workout cards.
+- Categories help organize the workout cards based on the muscle groups they target.
+Each table inherits insert, update, delete, and format helper functions.
 
 ## Models and Endpoints
 
