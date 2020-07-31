@@ -126,61 +126,61 @@ def create_app(test_config=None):
 
     # Determines if the Access Token is valid
 
-    def requires_auth(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            if constants.PROFILE_KEY not in session:
-                return redirect('/login')
-            return f(*args, **kwargs)
-
-        return decorated
-
     # def requires_auth(f):
-
     #     @wraps(f)
     #     def decorated(*args, **kwargs):
-    #         token = get_token_auth_header()
-    #         jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
-    #         jwks = json.loads(jsonurl.read())
-    #         unverified_header = jwt.get_unverified_header(token)
-    #         rsa_key = {}
-    #         for key in jwks["keys"]:
-    #             if key["kid"] == unverified_header["kid"]:
-    #                 rsa_key = {
-    #                     "kty": key["kty"],
-    #                     "kid": key["kid"],
-    #                     "use": key["use"],
-    #                     "n": key["n"],
-    #                     "e": key["e"]
-    #                 }
-    #         if rsa_key:
-    #             try:
-    #                 payload = jwt.decode(
-    #                     token,
-    #                     rsa_key,
-    #                     algorithms=ALGORITHMS,
-    #                     audience=API_AUDIENCE,
-    #                     issuer="https://"+AUTH0_DOMAIN+"/"
-    #                 )
-    #             except jwt.ExpiredSignatureError:
-    #                 raise AuthError({"code": "token_expired",
-    #                                 "description": "token is expired"}, 401)
-    #             except jwt.JWTClaimsError:
-    #                 raise AuthError({"code": "invalid_claims",
-    #                                 "description":
-    #                                     "incorrect claims,"
-    #                                     "please check the audience and issuer"}, 401)
-    #             except Exception:
-    #                 raise AuthError({"code": "invalid_header",
-    #                                 "description":
-    #                                     "Unable to parse authentication"
-    #                                     " token."}, 401)
+    #         if constants.PROFILE_KEY not in session:
+    #             return redirect('/login')
+    #         return f(*args, **kwargs)
 
-    #             _request_ctx_stack.top.current_user = payload
-    #             return f(*args, **kwargs)
-    #         raise AuthError({"code": "invalid_header",
-    #                         "description": "Unable to find appropriate key"}, 401)
     #     return decorated
+
+    def requires_auth(f):
+
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            token = get_token_auth_header()
+            jsonurl = urlopen("https://"+AUTH0_DOMAIN+"/.well-known/jwks.json")
+            jwks = json.loads(jsonurl.read())
+            unverified_header = jwt.get_unverified_header(token)
+            rsa_key = {}
+            for key in jwks["keys"]:
+                if key["kid"] == unverified_header["kid"]:
+                    rsa_key = {
+                        "kty": key["kty"],
+                        "kid": key["kid"],
+                        "use": key["use"],
+                        "n": key["n"],
+                        "e": key["e"]
+                    }
+            if rsa_key:
+                try:
+                    payload = jwt.decode(
+                        token,
+                        rsa_key,
+                        algorithms=ALGORITHMS,
+                        audience=API_AUDIENCE,
+                        issuer="https://"+AUTH0_DOMAIN+"/"
+                    )
+                except jwt.ExpiredSignatureError:
+                    raise AuthError({"code": "token_expired",
+                                    "description": "token is expired"}, 401)
+                except jwt.JWTClaimsError:
+                    raise AuthError({"code": "invalid_claims",
+                                    "description":
+                                        "incorrect claims,"
+                                        "please check the audience and issuer"}, 401)
+                except Exception:
+                    raise AuthError({"code": "invalid_header",
+                                    "description":
+                                        "Unable to parse authentication"
+                                        " token."}, 401)
+
+                _request_ctx_stack.top.current_user = payload
+                return f(*args, **kwargs)
+            raise AuthError({"code": "invalid_header",
+                            "description": "Unable to find appropriate key"}, 401)
+        return decorated
 
     # Determines if the required scope is present in the Access Token
     # Args: required_scope (str): The scope required to access the resource
@@ -277,6 +277,7 @@ def create_app(test_config=None):
     #     }, 401)
 
     @app.route('/exercises', methods=['GET'])
+    @cross_origin(headers=["Content-Type", "Authorization"])
     @requires_auth
     def get_exercises():
         if requires_scope("get:exercises"):
@@ -444,6 +445,7 @@ def create_app(test_config=None):
     # _________________________________________
 
     @app.route('/exercises/<int:exercise_id>', methods=['PATCH'])
+    @cross_origin(headers=["Content-Type", "Authorization"])
     @requires_auth
     def edit_exercise(exercise_id):
         if requires_scope("patch:exercise"):

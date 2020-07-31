@@ -584,7 +584,7 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "manager",
+			"name": "superuser",
 			"item": [
 				{
 					"name": "/decks",
@@ -940,7 +940,7 @@
 	],
 	"variable": [
 		{
-			"id": "22388280-b94b-4285-8a36-a4d10ec6e190",
+			"id": "5aa92136-222d-42a3-b77f-2d6fb6bda581",
 			"key": "host",
 			"value": "localhost:5000"
 		}
