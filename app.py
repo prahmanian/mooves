@@ -198,23 +198,23 @@ def create_app(test_config=None):
         #     "description": "You don't have access to this resource"
         # }, 401)
 
-    # @app.route('/exercises/<int:exercise_id>', methods=['GET'])
-    # @requires_auth
-    # def get_exercise(exercise_id):
-    #     if requires_scope("get:exercises"):
-    #         exercise = Exercises.query.filter(
-    #           Exercises.id == exercise_id).one_or_none()
-    #         if exercise is None:
-    #             abort(404)
-    #         exercise = exercise.format()
-    #         return jsonify({
-    #           "success": True,
-    #           "exercise": exercise
-    #           })
-    #     raise AuthError({
-    #         "code": "Unauthorized",
-    #         "description": "You don't have access to this resource"
-    #     }, 401)
+    @app.route('/exercises/<int:exercise_id>', methods=['GET'])
+    @requires_auth("get:exercises")
+    def get_exercise(token, exercise_id):
+        # if requires_scope("get:exercises"):
+        exercise = Exercises.query.filter(
+          Exercises.id == exercise_id).one_or_none()
+        if exercise is None:
+            abort(404)
+        exercise = exercise.format()
+        return jsonify({
+          "success": True,
+          "exercise": exercise
+          })
+        # raise AuthError({
+        #     "code": "Unauthorized",
+        #     "description": "You don't have access to this resource"
+        # }, 401)
 
     @app.route('/categories', methods=['GET'])
     @requires_auth("get:categories")

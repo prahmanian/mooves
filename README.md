@@ -96,6 +96,7 @@ Registered User Roles
 
 #### Getting Fresh Superuser Token
 1. Go to https://mooves.herokuapp.com (https://mooves.us.auth0.com/authorize?audience=https://mooves.us/api&response_type=token&client_id=TQjRW5UYhPXTB7YM1YkZjRhYbtOruOhj&redirect_uri=http://127.0.0.1:5000/callback)
+Alternatively you can get the url for your configuration by sending a get request to the authorization/url endpoint.
 2. Click on Login and enter the following credentials into Auth0, which has been designated with Superuser role:
    Email: pedram+moovesadmin@gutenmade.com
    Password: M00v3$2020
@@ -120,7 +121,7 @@ Registered User Roles
 
  
  ## Testing
-Unit tests are provided in test_app.py. To run this file use:
+33 Unit tests are provided in test_app.py. To run this file use:
 '''
 dropdb mooves_test
 createdb mooves_test
